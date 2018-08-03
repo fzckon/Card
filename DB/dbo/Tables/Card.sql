@@ -1,0 +1,27 @@
+﻿CREATE TABLE [dbo].[Card]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [CardType] INT NOT NULL DEFAULT 1, 
+    [CardOrg] INT NOT NULL DEFAULT 1, 
+    [CardStatus] INT NOT NULL DEFAULT 1, 
+    [CardLevel] INT NULL DEFAULT 1, 
+    [CardCurrency] INT NULL DEFAULT 1, 
+    [CardNo] VARCHAR(32) NOT NULL, 
+    [CardCvv] CHAR(7) NOT NULL, 
+    [CardCvv2] CHAR(3) NOT NULL, 
+    [CardName] NVARCHAR(50) NULL, 
+    [BankId] UNIQUEIDENTIFIER NOT NULL, 
+    [OpenBankName] NVARCHAR(100) NULL, 
+    [ValidThru] CHAR(4) NULL, 
+    [ValidDate] DATE NULL, 
+	[ReservedTel] CHAR(11) NOT NULL,
+	[QPassword] CHAR(6) NULL,
+	[Password] CHAR(6) NULL,
+    [BillingDay] INT NULL, 
+    [RepayDay] INT NULL, 
+	[CardAmount] DECIMAL(18,2) NULL,
+	[TempAmount] DECIMAL(18,2) NULL,
+    [HandleDate] DATE NULL, 
+    [CreateTime] DATETIME NOT NULL, 
+    [Remark] NVARCHAR(500) NULL
+)

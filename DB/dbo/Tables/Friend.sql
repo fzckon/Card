@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[Friend]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [UserId] UNIQUEIDENTIFIER NOT NULL, 
+    [FriendId] UNIQUEIDENTIFIER NOT NULL, 
+    [FriendStatus] INT NOT NULL, 
+    [CreateTime] DATETIME NOT NULL, 
+)

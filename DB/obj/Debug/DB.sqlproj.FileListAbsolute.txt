@@ -1,0 +1,10 @@
+D:\Code\Card\DB\bin\Debug\DB.dacpac
+D:\Code\Card\DB\bin\Debug\DB.dll
+D:\Code\Card\DB\bin\Debug\DB.pdb
+D:\Code\Card\DB\obj\Debug\DB.sqlprojAssemblyReference.cache
+D:\Code\Card\DB\obj\Debug\DB.dll
+D:\Code\Card\DB\obj\Debug\DB.pdb
+D:\Code\Card\DB\obj\Debug\Model.xml
+D:\Code\Card\DB\obj\Debug\refactor.xml
+D:\Code\Card\DB\obj\Debug\postdeploy.sql
+D:\Code\Card\DB\obj\Debug\predeploy.sql

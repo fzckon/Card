@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[UserPwd]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [UserId] UNIQUEIDENTIFIER NOT NULL, 
+    [Password] VARCHAR(128) NULL, 
+    [PwdStatus] INT NOT NULL, 
+    [CreateTime] DATETIME NOT NULL, 
+)

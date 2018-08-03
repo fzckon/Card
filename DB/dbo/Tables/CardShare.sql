@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[CardShare]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [CardId] UNIQUEIDENTIFIER NOT NULL, 
+    [UserId] UNIQUEIDENTIFIER NOT NULL, 
+    [CardShareStatus] INT NOT NULL, 
+    [CreateTime] DATETIME NOT NULL, 
+)
