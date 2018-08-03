@@ -24,10 +24,12 @@ namespace EF
 
         }
 
+        public static string ConnectionString { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //注入Sql链接字符串
-            optionsBuilder.UseSqlServer(@"Server=.;Database=Card;Trusted_Connection=True;");
+            //配置数据链接
+            optionsBuilder.UseSqlServer(ConnectionString, b => b.UseRowNumberForPaging());
         }
     }
 }
