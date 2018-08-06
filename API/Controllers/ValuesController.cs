@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EF.Card;
+using EF.Card.Respository;
 using Microsoft.AspNetCore.Mvc;
+using Model.Models;
 
-namespace API.Controllers
+namespace API.Card.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class ValuesController : BaseController
     {
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            using (var bank = new BankRespository(cardContext))
+            {
+
+            }
             return new string[] { "value1", "value2" };
         }
 
