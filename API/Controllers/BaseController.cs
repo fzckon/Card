@@ -10,7 +10,9 @@ namespace API.Card.Controllers
 {
     public class BaseController : Controller
     {
-        
+        IUnitOfWork unitOfWork = new UnitOfWork();
 
+        
+        
     }
 }
