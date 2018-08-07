@@ -7,6 +7,15 @@ namespace EF.Card
 {
     public class CardContext : DbContext
     {
+
+        private static CardContext cardContext;
+        public static void Initialize(IServiceProvider serviceProvider)
+        {
+            cardContext = (CardContext)serviceProvider.GetService(typeof(CardContext));
+
+            //do your something
+        }
+
         public CardContext(DbContextOptions<CardContext> options) : base(options)
         {
         }

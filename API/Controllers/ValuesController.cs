@@ -16,10 +16,6 @@ namespace API.Card.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            using (var bank = new BankRespository(cardContext))
-            {
-
-            }
             return new string[] { "value1", "value2" };
         }
 
