@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EF.Card;
 using Model.Models;
+using EF.Card.Respository;
 
 namespace API.Card.Controllers
 {
@@ -14,15 +15,23 @@ namespace API.Card.Controllers
     [Route("api/Bank")]
     public class BankController : BaseController
     {
+        private BankRepository bankRepo;
+        protected override void Dispose(bool disposing)
+        {
+            if (bankRepo != null) bankRepo.Dispose();
+            base.Dispose(disposing);
+        }
+
         public BankController(CardContext cardContext) : base(cardContext)
         {
+            bankRepo = new BankRepository(_cardContext);
         }
 
         // GET: api/Bank
         [HttpGet]
         public IEnumerable<Bank> GetBanks()
         {
-            return _cardContext.Banks;
+            return bankRepo.GetList();
         }
 
         // GET: api/Bank/5

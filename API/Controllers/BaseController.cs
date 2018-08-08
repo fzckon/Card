@@ -17,5 +17,10 @@ namespace API.Card.Controllers
             _cardContext = cardContext;
         }
 
+        protected override void Dispose(bool disposing)
+        {            
+            base.Dispose(disposing);
+        }
+
     }
 }
