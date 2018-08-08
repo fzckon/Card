@@ -12,6 +12,10 @@ namespace API.Card.Controllers
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
+        public ValuesController(CardContext cardContext) : base(cardContext)
+        {
+        }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()

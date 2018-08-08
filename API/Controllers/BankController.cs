@@ -12,20 +12,17 @@ namespace API.Card.Controllers
 {
     [Produces("application/json")]
     [Route("api/Bank")]
-    public class BankController : Controller
+    public class BankController : BaseController
     {
-        private readonly CardContext _context;
-
-        public BankController(CardContext context)
+        public BankController(CardContext cardContext) : base(cardContext)
         {
-            _context = context;
         }
 
         // GET: api/Bank
         [HttpGet]
         public IEnumerable<Bank> GetBanks()
         {
-            return _context.Banks;
+            return _cardContext.Banks;
         }
 
         // GET: api/Bank/5
@@ -37,7 +34,7 @@ namespace API.Card.Controllers
                 return BadRequest(ModelState);
             }
 
-            var bank = await _context.Banks.SingleOrDefaultAsync(m => m.Id == id);
+            var bank = await _cardContext.Banks.SingleOrDefaultAsync(m => m.Id == id);
 
             if (bank == null)
             {
@@ -61,11 +58,11 @@ namespace API.Card.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(bank).State = EntityState.Modified;
+            _cardContext.Entry(bank).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _cardContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -91,8 +88,8 @@ namespace API.Card.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Banks.Add(bank);
-            await _context.SaveChangesAsync();
+            _cardContext.Banks.Add(bank);
+            await _cardContext.SaveChangesAsync();
 
             return CreatedAtAction("GetBank", new { id = bank.Id }, bank);
         }
@@ -106,21 +103,21 @@ namespace API.Card.Controllers
                 return BadRequest(ModelState);
             }
 
-            var bank = await _context.Banks.SingleOrDefaultAsync(m => m.Id == id);
+            var bank = await _cardContext.Banks.SingleOrDefaultAsync(m => m.Id == id);
             if (bank == null)
             {
                 return NotFound();
             }
 
-            _context.Banks.Remove(bank);
-            await _context.SaveChangesAsync();
+            _cardContext.Banks.Remove(bank);
+            await _cardContext.SaveChangesAsync();
 
             return Ok(bank);
         }
 
         private bool BankExists(string id)
         {
-            return _context.Banks.Any(e => e.Id == id);
+            return _cardContext.Banks.Any(e => e.Id == id);
         }
     }
 }

@@ -10,7 +10,12 @@ namespace API.Card.Controllers
 {
     public class BaseController : Controller
     {
-        
+        protected readonly CardContext _cardContext;
+
+        public BaseController(CardContext cardContext)
+        {
+            _cardContext = cardContext;
+        }
 
     }
 }
