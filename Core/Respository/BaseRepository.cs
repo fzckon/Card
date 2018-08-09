@@ -59,89 +59,84 @@ namespace EF.Core.Repository
             UnitOfWork = new UnitOfWork(_context);
         }
 
-        #region Get
-        public TEntity Get(TPrimaryKey id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> GetAsync(TPrimaryKey id)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public TEntity Single(Expression<Func<TEntity, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntity FirstOrDefault(TPrimaryKey id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
+        #region Find
         public TEntity Find(TPrimaryKey id)
         {
-            throw new NotImplementedException();
+            return _set.Find(id);
         }
 
         public Task<TEntity> FindAsync(TPrimaryKey id)
         {
-            throw new NotImplementedException();
+            return _set.FindAsync(id);
         }
 
-        public TEntity Load(TPrimaryKey id)
+        public TEntity Single(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _set.Single(predicate);
         }
+
+        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _set.SingleAsync(predicate);
+        }
+
+        public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _set.SingleOrDefault(predicate);
+        }
+
+        public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _set.SingleOrDefaultAsync(predicate);
+        }
+
+        public TEntity FirstOrDefault(TPrimaryKey id)
+        {
+            TEntity entity = Find(id);
+            if (entity == null) return default(TEntity);
+            return entity;
+        }
+
+        public Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id)
+        {
+            Task<TEntity> entity = FindAsync(id);
+            if (entity == null) return default(Task<TEntity>);
+            return entity;
+        }
+
+        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _set.FirstOrDefault(predicate);
+        }
+
+        public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _set.FirstOrDefaultAsync(predicate);
+        }
+
         #endregion
 
-        #region GetList
+        #region List
         public IQueryable<TEntity> GetList()
         {
-            throw new NotImplementedException();
+            return _set.AsNoTracking();
         }
 
         public Task<IQueryable<TEntity>> GetListAsync()
         {
-            throw new NotImplementedException();
+            return Task.Run(() => GetList());
         }
 
         public IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _set.Where(predicate).AsNoTracking();
         }
 
         public Task<IQueryable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => GetList(predicate));
         }
-
-        public IQueryable<TEntity> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public T Query<T>(Func<IQueryable<T>, T> queryMethod)
         {
             throw new NotImplementedException();
@@ -318,6 +313,6 @@ namespace EF.Core.Repository
         }
 
         #endregion
-        
+
     }
 }

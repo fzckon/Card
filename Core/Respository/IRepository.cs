@@ -10,26 +10,25 @@ namespace EF.Core.Repository
 {
     public interface IRepository<TEntity, TPrimaryKey> where TEntity : class
     {
-        #region Get
-        TEntity Get(TPrimaryKey id);
-        Task<TEntity> GetAsync(TPrimaryKey id);
+        #region Find
+        TEntity Find(TPrimaryKey id);
+        Task<TEntity> FindAsync(TPrimaryKey id);
         TEntity Single(Expression<Func<TEntity, bool>> predicate);
         Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> predicate);
+        TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
         TEntity FirstOrDefault(TPrimaryKey id);
         Task<TEntity> FirstOrDefaultAsync(TPrimaryKey id);
         TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate);
         Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
-        TEntity Find(TPrimaryKey id);
-        Task<TEntity> FindAsync(TPrimaryKey id);
-        TEntity Load(TPrimaryKey id);
+        //TEntity Load(TPrimaryKey id);
         #endregion
 
-        #region GetList
+        #region List
         IQueryable<TEntity> GetList();
         Task<IQueryable<TEntity>> GetListAsync();
         IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate);
         Task<IQueryable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate);
-        IQueryable<TEntity> GetAll();
         T Query<T>(Func<IQueryable<T>, T> queryMethod);
         #endregion
 
