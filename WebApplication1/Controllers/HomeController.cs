@@ -42,6 +42,13 @@ namespace WebApplication1.Controllers
 
             Common.Utils.Logger.Default.Error("Test3-Error");
             Common.Utils.Logger.Factory("Trace").Error("Test4-Error");
+            LogEventInfo logEventInfo = new LogEventInfo
+            {
+                Level = LogLevel.Error,
+            };
+            logEventInfo.Properties["Message"] = "111";
+            var messageTemplateParameters = logEventInfo.MessageTemplateParameters;
+            Common.Utils.Logger.Factory("Trace").Log(logEventInfo);
 
             return View();
         }

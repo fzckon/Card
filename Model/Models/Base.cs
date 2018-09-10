@@ -24,4 +24,9 @@ namespace Model.Models
 
     }
 
+    public class Create : Base
+    {
+        public Guid CreateUser { get; set; }
+    }
+
 }
