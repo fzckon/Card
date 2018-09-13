@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EF.Card;
+using EF.Log;
 using Model.Models;
 using EF.Card.Respository;
 
@@ -22,7 +23,7 @@ namespace API.Card.Controllers
             base.Dispose(disposing);
         }
 
-        public BankController(CardContext cardContext) : base(cardContext)
+        public BankController(CardContext cardContext, LogContext logContext) : base(cardContext, logContext)
         {
             bankRepo = new BankRepository(_cardContext);
         }

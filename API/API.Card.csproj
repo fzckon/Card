@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EF.Log\EF.Log.csproj" />
     <ProjectReference Include="..\EF\EF.Card.csproj" />
   </ItemGroup>
 

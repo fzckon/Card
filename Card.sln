@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebAppli
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interface", "Interface", "{EE5351F5-35B1-4B66-B263-F1FDCA8AFC30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.Log", "EF.Log\EF.Log.csproj", "{306829D6-9567-4823-B3E3-57AFF178845A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF.Log", "EF.Log\EF.Log.csproj", "{306829D6-9567-4823-B3E3-57AFF178845A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

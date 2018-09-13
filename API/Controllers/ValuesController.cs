@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EF.Card;
+using EF.Log;
 using EF.Card.Respository;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
@@ -12,15 +13,16 @@ namespace API.Card.Controllers
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
-        public ValuesController(CardContext cardContext) : base(cardContext)
+        public ValuesController(CardContext cardContext, LogContext logContext) : base(cardContext, logContext)
         {
+            var logs = logContext.Logs;
         }
 
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
-           
+
             return new string[] { "value1", "value2" };
         }
 
