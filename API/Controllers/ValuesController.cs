@@ -15,6 +15,7 @@ namespace API.Card.Controllers
     {
         public ValuesController(CardContext cardContext, LogContext logContext) : base(cardContext, logContext)
         {
+            throw new Exception("???");
             var logs = logContext.Logs;
         }
 
