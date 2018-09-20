@@ -84,5 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DB.publish.xml" />
+    <None Include="DB.Card.publish.xml" />
   </ItemGroup>
 </Project>

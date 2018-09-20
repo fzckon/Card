@@ -25,9 +25,10 @@ namespace API.Card.Controllers
             base.Dispose(disposing);
         }
 
-        public string Error()
+        public ActionResult Error()
         {
-            return "value";
+            var re = Request;
+            return Content("");
         }
     }
 }

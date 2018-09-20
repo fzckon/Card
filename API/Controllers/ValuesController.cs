@@ -7,22 +7,39 @@ using EF.Log;
 using EF.Card.Respository;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
+using Microsoft.Extensions.Logging;
+//using NLog;
 
 namespace API.Card.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
-        public ValuesController(CardContext cardContext, LogContext logContext) : base(cardContext, logContext)
+        protected ILogger<ValuesController> logger;
+        static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        public ValuesController(CardContext cardContext, LogContext logContext, ILogger<ValuesController> logger) : base(cardContext, logContext)
         {
-            throw new Exception("???");
-            var logs = logContext.Logs;
+
+            //var logs = logContext.Logs;
+            this.logger = logger;
         }
 
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            //throw new Exception("???");
+            try
+            {
+                throw new Exception("???");
+            }
+            catch (Exception ex)
+            {
+                
+                logger.LogError(ex, "LogError");
+                logger.LogInformation("-----------Information-----------");
+                Logger.Error(ex, "Error");
+            }
 
             return new string[] { "value1", "value2" };
         }

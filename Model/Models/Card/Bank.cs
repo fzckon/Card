@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Model.Models
@@ -42,7 +43,7 @@ namespace Model.Models
         public string Website { get; set; }
 
     }
-
+    
     public class Bank : VBank
     {
         public override string Id { get; set; }

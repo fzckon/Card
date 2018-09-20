@@ -31,7 +31,7 @@ namespace EF.Card
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<Course>().ToTable("Course");
-
+            
         }
 
         //public static string ConnectionString { get; set; }
