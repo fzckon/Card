@@ -15,7 +15,7 @@ using Microsoft.Extensions.Options;
 using NLog.Extensions.Logging;
 using NLog.Web;
 
-namespace API.Card
+namespace Interface.Card
 {
     public class Startup
     {
@@ -32,16 +32,16 @@ namespace API.Card
             services
                 .AddEntityFrameworkSqlServer()
                 .AddDbContext<CardContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("Card"), //读取配置文件中的链接字符串
-                    b => b.UseRowNumberForPaging());  //配置分页 使用旧方式
-            })
-            .AddDbContext<LogContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("Log"), //读取配置文件中的链接字符串
-                    b => b.UseRowNumberForPaging());  //配置分页 使用旧方式
-            })
-            ;
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("Card"), //读取配置文件中的链接字符串
+                        b => b.UseRowNumberForPaging());  //配置分页 使用旧方式
+                })
+                .AddDbContext<LogContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("Log"), //读取配置文件中的链接字符串
+                        b => b.UseRowNumberForPaging());  //配置分页 使用旧方式
+                })
+                ;
 
             services.AddMvc();
             IServiceProvider service = services.BuildServiceProvider();

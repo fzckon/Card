@@ -10,14 +10,14 @@ using Model.Models;
 using Microsoft.Extensions.Logging;
 //using NLog;
 
-namespace API.Card.Controllers
+namespace InterfaceController.Card.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : BaseController
     {
         protected ILogger<ValuesController> logger;
         static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        public ValuesController(CardContext cardContext, LogContext logContext, ILogger<ValuesController> logger) : base(cardContext, logContext)
+        public ValuesController(CardContext cardContext, ILogger<ValuesController> logger) : base(cardContext)
         {
 
             //var logs = logContext.Logs;

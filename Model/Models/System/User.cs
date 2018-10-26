@@ -39,7 +39,7 @@ namespace Model.Models
         public string Email { get; set; }
 
         /// <summary>
-        /// 朋友Id
+        /// 生日
         /// </summary>
         public DateTime? Birthday { get; set; }
 

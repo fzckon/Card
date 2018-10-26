@@ -10,7 +10,7 @@ using EF.Log;
 using Model.Models;
 using EF.Card.Respository;
 
-namespace API.Card.Controllers
+namespace InterfaceController.Card.Controllers
 {
     [Produces("application/json")]
     [Route("api/Bank")]
@@ -23,7 +23,7 @@ namespace API.Card.Controllers
             base.Dispose(disposing);
         }
 
-        public BankController(CardContext cardContext, LogContext logContext) : base(cardContext, logContext)
+        public BankController(CardContext cardContext) : base(cardContext)
         {
             bankRepo = new BankRepository(_cardContext);
         }
