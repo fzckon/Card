@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using EF.Card;
 using EF.Log;
+using EF.System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +15,12 @@ namespace InterfaceController.Card.Controllers
     {
         protected readonly CardContext _cardContext;
         protected readonly LogContext _logContext;
+        protected readonly SystemContext _systemContext;
 
-        public BaseController(CardContext cardContext)
+        public BaseController(CardContext cardContext, SystemContext systemContext = null)
         {
             _cardContext = cardContext;
+            _systemContext = systemContext;
             //_logContext = logContext;
         }
 

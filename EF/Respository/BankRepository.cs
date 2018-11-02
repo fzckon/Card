@@ -7,17 +7,18 @@ using System.Text;
 
 namespace EF.Card.Respository
 {
-    public class BankRepository : BaseRepository<Bank, string>
+    public class BankRepository : BaseRepository<Bank, Guid>, IBankRepository
     {
         private CardContext _cardContext = null;
         public BankRepository(CardContext cardContext) : base(cardContext)
         {
             _cardContext = cardContext;
         }
+        
+    }
 
-        private void test()
-        {
-           
-        }
+    public interface IBankRepository
+    {
+
     }
 }

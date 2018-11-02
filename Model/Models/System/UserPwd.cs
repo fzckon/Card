@@ -1,6 +1,8 @@
 ﻿using Common.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Model.Models
@@ -10,29 +12,32 @@ namespace Model.Models
         /// <summary>
         /// Id
         /// </summary>
-        public virtual string Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         /// <summary>
         /// 用户Id
         /// </summary>
-        public string UserId { get; set; }
+        [Required]        
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// 密码
         /// </summary>
+        [Required, MaxLength(200)]        
         public string Password { get; set; }
-        
+
         /// <summary>
         /// 状态
         /// </summary>
-        public int PwdStatus { get; set; }
+        public PwdStatus PwdStatus { get; set; }
 
 
     }
 
-    public class UserPwd : VUser
+    [Table("UserPwd")]
+    public class UserPwd : VUserPwd
     {
-        public override string Id { get; set; }
+        public override Guid Id { get; set; }
     }
     
     public enum PwdStatus 

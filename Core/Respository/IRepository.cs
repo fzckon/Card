@@ -42,6 +42,9 @@ namespace EF.Core.Repository
         #region Update
         TEntity Update(TEntity entity);
         Task<TEntity> UpdateAsync(TEntity entity);
+        TEntity Update(TEntity entity, object include, object exclude);
+        Task<TEntity> UpdateAsync(TEntity entity, object include, object exclude);
+
         #endregion
 
         #region Save
@@ -76,6 +79,7 @@ namespace EF.Core.Repository
         long LongCount(Expression<Func<TEntity, bool>> predicate);
         Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate);
         bool Exists(Expression<Func<TEntity, bool>> predicate);
+        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
         #endregion
 
 

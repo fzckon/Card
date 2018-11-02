@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EF.Card;
 using EF.Log;
+using EF.System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -41,10 +42,16 @@ namespace Interface.Card
                     options.UseSqlServer(Configuration.GetConnectionString("Log"), //读取配置文件中的链接字符串
                         b => b.UseRowNumberForPaging());  //配置分页 使用旧方式
                 })
+                .AddDbContext<SystemContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("System"), //读取配置文件中的链接字符串
+                        b => b.UseRowNumberForPaging());  //配置分页 使用旧方式
+                })
                 ;
 
             services.AddMvc();
-            IServiceProvider service = services.BuildServiceProvider();
+            services.AddSession();
+            //IServiceProvider service = services.BuildServiceProvider();
 
 
         }
@@ -65,6 +72,7 @@ namespace Interface.Card
             }
 
             app.UseMvc();
+            app.UseSession();
 
             //允许访问wwwroot文件夹下的静态文件
             app.UseStaticFiles();
@@ -87,6 +95,7 @@ namespace Interface.Card
                     //LogContext.Initialize(serviceScope.ServiceProvider);
                     serviceScope.ServiceProvider.GetService<CardContext>().Database.Migrate();
                     serviceScope.ServiceProvider.GetService<LogContext>().Database.Migrate();
+                    serviceScope.ServiceProvider.GetService<SystemContext>().Database.Migrate();
                 }
             }
             catch { }

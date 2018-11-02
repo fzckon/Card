@@ -1,6 +1,8 @@
 ﻿using Common.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Model.Models
@@ -10,18 +12,20 @@ namespace Model.Models
         /// <summary>
         /// Id
         /// </summary>
-        public virtual string Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         /// <summary>
         /// 角色名
         /// </summary>
+        [Required, MaxLength(50)]        
         public string RoleName { get; set; }
-        
+
     }
 
+    [Table("Role")]
     public class Role : VRole
     {
-        public override string Id { get; set; }
+        public override Guid Id { get; set; }
     }
     
 }

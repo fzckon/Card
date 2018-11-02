@@ -1,31 +1,40 @@
 ﻿using Common.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Model.Models
 {
-    public class VCard : Base
+    public class VCardInfo : Base
     {
         /// <summary>
         /// Id
         /// </summary>
-        public virtual string Id { get; set; }
+        public virtual Guid Id { get; set; }
+
+        /// <summary>
+        /// 用户Id
+        /// </summary>
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// 银行Id
         /// </summary>
-        public string BankId { get; set; }
+        public Guid BankId { get; set; }
 
         /// <summary>
         /// 开户行
         /// </summary>
+        [MaxLength(200)]
         public string OpenBankName { get; set; }
 
         /// <summary>
         /// 卡片类型 1 信用卡 2 储蓄卡 3 存折
         /// </summary>
-        public int CardType { get; set; }
+        [Required]
+        public CardType CardType { get; set; }
 
         /// <summary>
         /// 卡片组织 
@@ -36,7 +45,8 @@ namespace Model.Models
         /// 16 日本国际信用卡 JCB 
         /// 32 大来卡 Diners 
         /// </summary>
-        public int CardOrg { get; set; }
+        [Required]
+        public CardOrg CardOrg { get; set; }
 
         /// <summary>
         /// 卡片等级
@@ -51,7 +61,8 @@ namespace Model.Models
         /// 9 无限卡 Visainfinite
         /// 10 绿卡 Green
         /// </summary>
-        public int CardLevel { get; set; }
+        [Required]
+        public CardLevel CardLevel { get; set; }
 
         /// <summary>
         /// 币种
@@ -59,31 +70,36 @@ namespace Model.Models
         /// 2 双币种
         /// 3 全币种/多币种
         /// </summary>
-        public int? CardCurrency { get; set; }
+        [Required]
+        public CardCurrency CardCurrency { get; set; }
 
         /// <summary>
         /// 卡片号码
         /// </summary>
+        [Required, MaxLength(16)]
         public string CardNo { get; set; }
 
         /// <summary>
         /// 卡片Cvv
         /// </summary>
+        [MaxLength(7), Column(TypeName = "varchar(7)")]
         public string CardCvv { get; set; }
 
         /// <summary>
         /// 卡片Cvv2
         /// </summary>
+        [MaxLength(3), Column(TypeName = "varchar(3)")]
         public string CardCvv2 { get; set; }
 
         /// <summary>
         /// 卡片名称
         /// </summary>
+        [MaxLength(20)]
         public string CardName { get; set; }
 
         /// <summary>
         /// 卡片额度
-        /// </summary>
+        /// </summary>      
         public decimal? CardAmount { get; set; }
 
         /// <summary>
@@ -96,26 +112,30 @@ namespace Model.Models
         /// 到期时间 2020-12-12
         /// 1220
         /// </summary>
+        [MaxLength(4), Column(TypeName = "varchar(4)")]
         public string ValidThru { get; set; }
 
         /// <summary>
         /// 到期时间
         /// </summary>
-        public DateTime ValidDate { get; set; }
+        public DateTime? ValidDate { get; set; }
 
         /// <summary>
         /// 预留电话
         /// </summary>
+        [MaxLength(11), Column(TypeName = "varchar(11)")]
         public string ReservedTel { get; set; }
 
         /// <summary>
         /// 查询密码
         /// </summary>
+        [MaxLength(6)]
         public string QPassword { get; set; }
 
         /// <summary>
         /// 取款密码
         /// </summary>
+        [MaxLength(6)]
         public string Password { get; set; }
 
         /// <summary>
@@ -133,26 +153,39 @@ namespace Model.Models
         /// <summary>
         /// 办卡时间
         /// </summary>
-        public DateTime HandleDate { get; set; }
+        public DateTime? HandleDate { get; set; }
 
         /// <summary>
         /// 状态
         /// </summary>
-        public int CardStatus { get; set; }
+        public CardStatus CardStatus { get; set; }
 
         public void SetCvv()
         {
             if (!string.IsNullOrEmpty(CardCvv))
                 CardCvv2 = CardCvv.Substring(4);
         }
+
+        public void SetValidThru()
+        {
+            if (ValidDate.HasValue)
+                ValidThru = ValidDate?.ToString("MMyy");
+        }
+
+        public void Pre()
+        {
+            SetCvv();
+            SetValidThru();
+        }
     }
 
-    public class CardInfo : VCard
+    [Table("CardInfo")]
+    public class CardInfo : VCardInfo
     {
-        public override string Id { get; set; }
+        public override Guid Id { get; set; }
     }
-    
-    public class CardModel : VCard
+
+    public class CardModel : VCardInfo
     {
 
     }

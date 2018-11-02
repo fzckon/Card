@@ -1,6 +1,8 @@
 ﻿using Common.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Model.Models
@@ -10,47 +12,57 @@ namespace Model.Models
         /// <summary>
         /// Id
         /// </summary>
-        public virtual string Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         /// <summary>
         /// 卡片Id
         /// </summary>
-        public string CardId { get; set; }
+        [Required]
+        public Guid CardId { get; set; }
 
         /// <summary>
         /// 账单日
         /// </summary>
+        [Required]
         public DateTime BillingDate { get; set; }
 
         /// <summary>
         /// 还款日
         /// </summary>
+        [Required]
         public DateTime RepayDate { get; set; }
 
         /// <summary>
         /// 账单金额
         /// </summary>
+        [Required]
         public decimal BillAmount { get; set; }
 
         /// <summary>
         /// 还款金额
         /// </summary>
+        [Required]
         public decimal RepayAmount { get; set; }
 
         /// <summary>
         /// 状态
         /// </summary>
-        public int BillStatus { get; set; }
+        [Required]
+        public BillStatus BillStatus { get; set; }
 
 
     }
 
+    [Table("Bill")]
     public class Bill : VBill
     {
-        public override string Id { get; set; }
+        public override Guid Id { get; set; }
     }
 
-    
+    public class BillQuery : VBill
+    {
+        public Guid UserId { get; set; }
+    }
 
     public enum BillStatus
     {

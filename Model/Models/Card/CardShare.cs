@@ -1,6 +1,7 @@
 ﻿using Common.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Model.Models
@@ -10,29 +11,29 @@ namespace Model.Models
         /// <summary>
         /// Id
         /// </summary>
-        public virtual string Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         /// <summary>
         /// 用户Id
         /// </summary>
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// 卡Id
         /// </summary>
-        public string CardId { get; set; }
+        public Guid CardId { get; set; }
 
         /// <summary>
         /// 状态
         /// </summary>
-        public int CardShareStatus { get; set; }
-
+        public CardShareStatus CardShareStatus { get; set; }
 
     }
 
+    [Table("CardShare")]
     public class CardShare : VCardShare
     {
-        public override string Id { get; set; }
+        public override Guid Id { get; set; }
     }
 
     public enum CardShareStatus

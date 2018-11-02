@@ -1,6 +1,7 @@
 ﻿using Common.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Model.Models
@@ -10,38 +11,24 @@ namespace Model.Models
         /// <summary>
         /// Id
         /// </summary>
-        public virtual string Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         /// <summary>
         /// 用户Id
         /// </summary>
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// 角色Id
         /// </summary>
-        public string RoleId { get; set; }
-
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public int UserRoleStatus { get; set; }
-
-
+        public Guid RoleId { get; set; }
+        
     }
 
+    [Table("UserRole")]
     public class UserRole : VUserRole
     {
-        public override string Id { get; set; }
+        public override Guid Id { get; set; }
     }
-
-    public enum UserRoleStatus
-    {
-        [EnumFieldDisplay("已删除")]
-        Del = 0,
-
-        [EnumFieldDisplay("正常")]
-        Normal = 1,
-
-    }
+    
 }

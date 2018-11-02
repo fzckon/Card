@@ -1,6 +1,8 @@
 ﻿using Common.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Model.Models
@@ -10,29 +12,33 @@ namespace Model.Models
         /// <summary>
         /// Id
         /// </summary>
-        public virtual string Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         /// <summary>
         /// 用户Id
         /// </summary>
-        public string UserId { get; set; }
+        [Required]        
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// 朋友Id
         /// </summary>
-        public string FriendId { get; set; }
-        
+        [Required]        
+        public Guid FriendId { get; set; }
+
         /// <summary>
         /// 状态
         /// </summary>
-        public int FriendStatus { get; set; }
+        [Required]        
+        public FriendStatus FriendStatus { get; set; }
 
 
     }
 
+    [Table("Friend")]
     public class Friend : VFriend
     {
-        public override string Id { get; set; }
+        public override Guid Id { get; set; }
     }
 
     

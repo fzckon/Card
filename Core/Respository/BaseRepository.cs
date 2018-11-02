@@ -20,7 +20,7 @@ namespace EF.Core.Repository
                 if (disposing)
                 {
                     // TODO: 释放托管状态(托管对象)。
-                    UnitOfWork.Dispose();
+                    uow.Dispose();
                 }
 
                 // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。
@@ -49,14 +49,14 @@ namespace EF.Core.Repository
 
         protected readonly DbContext _context = null;
         protected readonly DbSet<TEntity> _set;
-        public readonly UnitOfWork UnitOfWork = null;
+        public readonly UnitOfWork uow = null;
         public bool IsCommit = true;
 
         public BaseRepository(DbContext context)
         {
             _context = context;
             _set = _context.Set<TEntity>();
-            UnitOfWork = new UnitOfWork(_context);
+            uow = new UnitOfWork(_context);
         }
 
         #region Find
@@ -136,7 +136,7 @@ namespace EF.Core.Repository
         {
             return Task.Run(() => GetList(predicate));
         }
-        
+
         public T Query<T>(Func<IQueryable<T>, T> queryMethod)
         {
             throw new NotImplementedException();
@@ -147,20 +147,24 @@ namespace EF.Core.Repository
         #region Insert
         public TEntity Insert(TEntity entity)
         {
-            throw new NotImplementedException();
+            _set.Add(entity);
+            if (IsCommit) uow.SaveChanges();
+            return entity;
         }
 
         public Task<TEntity> InsertAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            _set.AddAsync(entity);
+            if (IsCommit) uow.SaveChangesAsync();
+            return Task.Run(() => entity);
         }
 
-        public TPrimaryKey InsertAndGetKey(TEntity entity)
+        public virtual TPrimaryKey InsertAndGetKey(TEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<TPrimaryKey> InsertAndGetKeyAsync(TEntity entity)
+        public virtual Task<TPrimaryKey> InsertAndGetKeyAsync(TEntity entity)
         {
             throw new NotImplementedException();
         }
@@ -170,12 +174,50 @@ namespace EF.Core.Repository
         #region Update
         public TEntity Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            _set.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+            if (IsCommit) uow.SaveChanges();
+            return entity;
         }
 
         public Task<TEntity> UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            _set.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+            if (IsCommit) uow.SaveChangesAsync();
+            return Task.Run(() => entity);
+        }
+
+        public TEntity Update(TEntity entity, object include, object exclude)
+        {
+
+            foreach (var inc in include.GetType().GetProperties())
+            {
+                _context.Entry(entity).Property(inc.Name).IsModified = true;
+            }
+            foreach (var exc in exclude.GetType().GetProperties())
+            {
+                _context.Entry(entity).Property(exc.Name).IsModified = false;
+            }
+
+            if (IsCommit) uow.SaveChanges();
+            return entity;
+        }
+
+        public Task<TEntity> UpdateAsync(TEntity entity, object include, object exclude)
+        {
+
+            foreach (var inc in include.GetType().GetProperties())
+            {
+                _context.Entry(entity).Property(inc.Name).IsModified = true;
+            }
+            foreach (var exc in exclude.GetType().GetProperties())
+            {
+                _context.Entry(entity).Property(exc.Name).IsModified = false;
+            }
+            
+            if (IsCommit) uow.SaveChangesAsync();
+            return Task.Run(() => entity);
         }
 
         #endregion
@@ -216,52 +258,97 @@ namespace EF.Core.Repository
         #region Delete
         public void Delete(TEntity entity)
         {
-            throw new NotImplementedException();
+            _set.Attach(entity);
+            _set.Remove(entity);
+            if (IsCommit) uow.SaveChanges();
         }
 
         public Task DeleteAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            _set.Attach(entity);
+            _set.Remove(entity);
+            if (IsCommit) uow.SaveChangesAsync();
+            return Task.Run(() => { });
         }
 
         public void Delete(TPrimaryKey id)
         {
-            throw new NotImplementedException();
+            var entity = Find(id);
+            Delete(entity);
         }
 
         public Task DeleteAsync(TPrimaryKey id)
         {
-            throw new NotImplementedException();
+            var entity = Find(id);
+            DeleteAsync(entity);
+            return Task.Run(() => { });
         }
 
         public void Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            var entitys = _set.Where(predicate);
+            foreach (var entity in entitys)
+            {
+                _set.Attach(entity);
+                _set.Remove(entity);
+            }
+            if (IsCommit) uow.SaveChanges();
         }
 
         public Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            var entitys = _set.Where(predicate);
+            foreach (var entity in entitys)
+            {
+                _set.Attach(entity);
+                _set.Remove(entity);
+            }
+            if (IsCommit) uow.SaveChangesAsync();
+            return Task.Run(() => { });
         }
 
         public void Delete(IEnumerable<TEntity> entitys)
         {
-            throw new NotImplementedException();
+            foreach (var entity in entitys)
+            {
+                _set.Attach(entity);
+                _set.Remove(entity);
+            }
+            if (IsCommit) uow.SaveChanges();
         }
 
         public Task DeleteAsync(IEnumerable<TEntity> entitys)
         {
-            throw new NotImplementedException();
+            foreach (var entity in entitys)
+            {
+                _set.Attach(entity);
+                _set.Remove(entity);
+            }
+            if (IsCommit) uow.SaveChangesAsync();
+            return Task.Run(() => { });
         }
 
         public void Delete(IEnumerable<TPrimaryKey> ids)
         {
-            throw new NotImplementedException();
+            foreach (var id in ids)
+            {
+                var entity = Find(id);
+                _set.Attach(entity);
+                _set.Remove(entity);
+            }
+            if (IsCommit) uow.SaveChanges();
         }
 
         public Task DeleteAsync(IEnumerable<TPrimaryKey> ids)
         {
-            throw new NotImplementedException();
+            foreach (var id in ids)
+            {
+                var entity = Find(id);
+                _set.Attach(entity);
+                _set.Remove(entity);
+            }
+            if (IsCommit) uow.SaveChanges();
+            return Task.Run(() => { });
         }
 
         #endregion
@@ -269,47 +356,52 @@ namespace EF.Core.Repository
         #region Other
         public int Count()
         {
-            throw new NotImplementedException();
+            return _set.Count();
         }
 
         public Task<int> CountAsync()
         {
-            throw new NotImplementedException();
+            return _set.CountAsync();
         }
 
         public int Count(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _set.Count(predicate);
         }
 
         public Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _set.CountAsync(predicate);
         }
 
         public long LongCount()
         {
-            throw new NotImplementedException();
+            return _set.LongCount();
         }
 
         public Task<long> LongCountAsync()
         {
-            throw new NotImplementedException();
+            return _set.LongCountAsync();
         }
 
         public long LongCount(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _set.LongCount(predicate);
         }
 
         public Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _set.LongCountAsync(predicate);
         }
 
         public bool Exists(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _set.Any(predicate);
+        }
+
+        public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _set.AnyAsync(predicate);
         }
 
         #endregion

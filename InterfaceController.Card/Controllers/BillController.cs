@@ -13,36 +13,41 @@ using EF.Card.Respository;
 namespace InterfaceController.Card.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Bank")]
-    public class BankController : BaseController
+    [Route("api/Bill")]
+    public class BillController : BaseController
     {
-        private BankRepository bankRepo;
+        private BillRepository billRepo;
         protected override void Dispose(bool disposing)
         {
-            if (bankRepo != null) bankRepo.Dispose();
+            if (billRepo != null) billRepo.Dispose();
             base.Dispose(disposing);
         }
 
-        public BankController(CardContext cardContext) : base(cardContext)
+        public BillController(CardContext cardContext) : base(cardContext)
         {
-            bankRepo = new BankRepository(_cardContext);
+            billRepo = new BillRepository(_cardContext);
         }
 
-        // GET: api/Bank
+        // GET: api/Bill
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromBody] BillQuery query)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var banks = await bankRepo.GetListAsync();
+            if (query.UserId == Guid.Empty)
+            {
+                return BadRequest();
+            }
 
-            return Ok(banks);
+            var bills = await billRepo.GetAsync(query);
+
+            return Ok(bills);
         }
 
-        // GET: api/Bank/5
+        // GET: api/Bill/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
@@ -51,33 +56,33 @@ namespace InterfaceController.Card.Controllers
                 return BadRequest(ModelState);
             }
 
-            var bank = await bankRepo.FirstOrDefaultAsync(id);
+            var bill = await billRepo.FirstOrDefaultAsync(id);
 
-            if (bank == null)
+            if (bill == null)
             {
                 return NotFound();
             }
 
-            return Ok(bank);
+            return Ok(bill);
         }
 
-        // PUT: api/Bank/5
+        // PUT: api/Bill/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] Bank bank)
+        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] Bill bill)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != bank.Id)
+            if (id != bill.Id)
             {
                 return BadRequest();
             }
 
             try
             {
-                await bankRepo.UpdateAsync(bank);
+                await billRepo.UpdateAsync(bill);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -94,21 +99,21 @@ namespace InterfaceController.Card.Controllers
             return NoContent();
         }
 
-        // POST: api/Bank
+        // POST: api/Bill
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Bank bank)
+        public async Task<IActionResult> Post([FromBody] Bill bill)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bank = await bankRepo.InsertAsync(bank);
+            bill = await billRepo.InsertAsync(bill);
 
-            return CreatedAtAction("GetBank", new { id = bank.Id }, bank);
+            return CreatedAtAction("Get", new { id = bill.Id }, bill);
         }
 
-        // DELETE: api/Bank/5
+        // DELETE: api/Bill/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
@@ -116,20 +121,20 @@ namespace InterfaceController.Card.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             if (Exists(id))
             {
                 return NotFound();
             }
 
-            await bankRepo.DeleteAsync(id);
+            await billRepo.DeleteAsync(id);
 
             return Ok();
         }
 
         private bool Exists(Guid id)
         {
-            return bankRepo.Exists(e => e.Id == id);
+            return billRepo.Exists(e => e.Id == id);
         }
     }
 }
