@@ -10,11 +10,11 @@ var buffer = require('vinyl-buffer');
 var globby = require('globby');
 var tsProject = ts.createProject('tsconfig.json');
 var paths = {
-    pages: ['./*.html', './*/*.html', '!./dist/*'],
-    js: ['./js/*'],
-    css: ['./css/*'],
-    img: ['./img/*'],
-    ts: ['./*.ts', './*/*.ts', '!./dist/*']
+    pages: ['./src/*.html', './src/*/*.html', './src/*/*/*.html'],
+    js: ['./src/content/*/*.js','./src/content/*/*/*.js'],
+    css: ['./src/content/*/*.css','./src/content/*/*/*.css'],
+    img: ['./src/content/img/*.*','./src/content/img/*/*.*'],
+    ts: ['./src/*.ts', './src/*/*.ts', './src/ts/*.ts']
 };
 
 gulp.task('webserver', function () {
@@ -23,72 +23,43 @@ gulp.task('webserver', function () {
         root: ['./dist/'],
         livereload: true
     });
-
 });
 
 gulp.task('html', function () {
     return gulp.src(paths.pages)
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist'))
+        .pipe(connect.reload());
 });
 
 gulp.task('ts', function () {
     return gulp.src(paths.ts)
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist/ts'));
 });
 
 gulp.task('js', function () {
     return gulp.src(paths.js)
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist/content'));
 });
 
 gulp.task('css', function () {
     return gulp.src(paths.css)
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist/content'));
 });
 
 gulp.task('img', function () {
     return gulp.src(paths.img)
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist/content/img'));
 });
-
+gulp.task('del-dist',function(){});
 gulp.task('copy', ['html', 'css', 'js', 'img']);
 
 gulp.task('watch', function () {
     // body...
-    gulp.watch(paths.pages, ['html']).pipe(connect.reload());
-    gulp.watch(paths.ts, bundle).pipe(connect.reload());
+    gulp.watch(paths.pages, ['html']);
+    gulp.watch(paths.ts, bundle);
 });
 
-var watchedBrowserify = watchify(
-    browserify({
-        basedir: '.',
-        debug: true,
-        entries: '',
-        cache: {},
-        packageCache: {}
-    }).plugin(tsify)
-);
-
-var watchedBrowserify1 = globby(paths.ts).then(function (entries) {
-    var b = watchify(browserify({
-        basedir: '.',
-        debug: true,
-        entries: entries,
-        cache: {},
-        packageCache: {}
-    }).plugin(tsify));
-
-    return b;
-});
-
-(async () => {
-    const a = await globby(paths.ts);
-
-    console.log(a);
-    //=> ['unicorn', 'rainbow']
-})();
-
-function bundle1() {
+function bundle() {
     globby(paths.ts).then(function (entries) {
 
         var b = watchify(browserify({
@@ -109,27 +80,57 @@ function bundle1() {
             .pipe(buffer())
             .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest("dist"));
+            .pipe(gulp.dest("dist"))
+            .pipe(connect.reload());
     });
-
-
 }
 
-function bundle() {
-    return watchedBrowserify
-        .transform('babelify', {
+gulp.task('default', ['copy', 'webserver', 'watch'], bundle);
+gulp.task('build', function () {
+    gulp.src(paths.pages).pipe(gulp.dest('./content'));
+    gulp.src(paths.js).pipe(gulp.dest('./content'));
+    gulp.src(paths.css).pipe(gulp.dest('./content'));
+    gulp.src(paths.img).pipe(gulp.dest('./content/img'));
+    console.log('build');
+    globby(paths.ts).then(function (entries) {
+        var b = watchify(browserify({
+            basedir: '.',
+            debug: true,
+            entries: entries,
+            cache: {},
+            packageCache: {}
+        }).plugin(tsify));
+
+        b.transform('babelify', {
             presets: ['es2015'],
             extensions: ['.ts']
         })
-        .bundle()
-        .pipe(source('bundle.js'))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest("dist"));
-}
-gulp.task('default', ['copy', 'webserver'], bundle1);
+            .bundle()
+            .pipe(source('bundle.js'))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({ loadMaps: true }))
+            .pipe(sourcemaps.write('./'))
+            .pipe(gulp.dest("."));
+        console.log('babelify');
+        return;
+    });
+    console.log('end');
+    return;
+});
 
+// function bundle() {
+//     return watchedBrowserify
+//         .transform('babelify', {
+//             presets: ['es2015'],
+//             extensions: ['.ts']
+//         })
+//         .bundle()
+//         .pipe(source('bundle.js'))
+//         .pipe(buffer())
+//         .pipe(sourcemaps.init({ loadMaps: true }))
+//         .pipe(sourcemaps.write('./'))
+//         .pipe(gulp.dest("dist"));
+// }
 // gulp.task('default', ['copy', 'webserver'], function () {
 //     return browserify({
 //         basedir: '.',

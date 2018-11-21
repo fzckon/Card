@@ -1,13 +1,13 @@
 {
     "files": [
-        "./index.ts"
+        "./src/index.ts"
     ],
     "compilerOptions": {
         "noImplicitAny": true,
         "target": "es2015"
     },
     "include": [
-        "./*.ts",
-        "./*/*.ts"
+        "./src/*.ts",
+        "./src/*/*.ts"
     ]
 }
