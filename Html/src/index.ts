@@ -1,7 +1,17 @@
-console.log('index123');
+console.log('index');
+import * as $ from 'jquery';
 
-//import * as $ from 'jquery';
-// import 'bootstrap/dist/css/bootstrap.min.css'
-// import 'bootstrap/dist/js/bootstrap.min.js'
 
-//$('body').html('111');
+export default interface IIndex {
+    init(): any;
+}
+
+class Index implements IIndex {
+    async init() {
+        if (true) await $('#main').load('./html/home/main.html');
+        else await $('#main').load('./html/home/login.html');
+    }
+}
+
+export const index = new Index();
+index.init();
