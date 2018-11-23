@@ -1,4 +1,4 @@
-console.log('index');
+
 import * as $ from 'jquery';
 
 export default interface IIndex {

@@ -15,7 +15,8 @@ var paths = {
     js: ['./src/content/*/*.js', './src/content/*/*/*.js'],
     css: ['./src/content/*/*.css', './src/content/*/*/*.css'],
     img: ['./src/content/img/*.*', './src/content/img/*/*.*'],
-    vendor: ['./src/vendor/*/*/*.min.js', './src/vendor/*/*/*/*.min.js', './src/vendor/*/*/*.min.css', './src/vendor/*/*/*/*.min.css'],
+    //vendor: ['./src/vendor/*/*.min.js', './src/vendor/*/*/*.min.js', './src/vendor/*/*/*/*.min.js', './src/vendor/*/*.min.css', './src/vendor/*/*/*.min.css', './src/vendor/*/*/*/*.min.css'],
+    vendor: ['./src/vendor/**'],
     hts: ["./src/*/*.ts", "./src/*/*/*.ts"],
     ts: ['./src/*.ts']
 };
