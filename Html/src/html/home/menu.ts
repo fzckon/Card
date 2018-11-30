@@ -30,6 +30,7 @@ class module_menu {
     level: number;
     hasChild: boolean;
     child?: Array<module_menu>;
+    fa?: string;
 }
 
 let _module_menus: module_menu[] = [
@@ -40,29 +41,57 @@ let _module_menus: module_menu[] = [
 ];
 
 let menuli_1: IElement = { element: 'li' };
-let menuli_2: IElement = { element: 'li' };
-let menuli_3: IElement = { element: 'li' };
+let menuli_2: IElement = { element: 'li', class: 'nav nav-second-level' };
+let menuli_3: IElement = { element: 'li', class: 'nav nav-third-level' };
 
 let createMenu = function (module_menus: module_menu[]) {
     let htmlMenu = '';
+    let _module_menus =  module_menus.filter(t => t.level == 1);
+    
+}
+
+let recmenu = function(module_menus: module_menu[]){
+    let menu_html=new Element(); 
     module_menus.forEach(module_menu => {
-        let menuli = menuli_1
-        let li = document.createElement('li');
+
+        let li = createMenuli(module_menu);
+
         if (module_menu.hasChild) {
+            let ul = document.createElement('ul');
+            let ulclass = '';
+            switch (module_menu.level) {
+                case 1: break;
+                case 2: ulclass = 'nav nav-second-level'; break;
+                case 3: ulclass = 'nav nav-third-level'; break;
+                default: break;
+            }
+            ul.setAttribute('class', ulclass);
+            let _module_menus = module_menus.filter(t => t.pcode = module_menu.code);
+            ul.appendChild(recmenu(_module_menus));
 
+            li.appendChild(ul);
         }
+        menu_html.appendChild(li);
     });
+
+    return menu_html;
 }
 
-let createMenuElement = function (module_menu: module_menu, menuli: IElement) {
-    switch (module_menu.level) {
-        case 1: $.extend(menuli, menuli_1); break;
-        case 2: $.extend(menuli, menuli_2); break;
-        case 3: $.extend(menuli, menuli_3); break;
-        default: return;
+let createMenuli = function (module_menu: module_menu) {
+    let li = document.createElement('li');
+    let a = document.createElement('a');
+    if (module_menu.url) a.setAttribute('url', module_menu.url);
+    if (module_menu.fa) {
+        let i = document.createElement('i');
+        i.setAttribute('class', module_menu.fa);
+        a.appendChild(i);
     }
+    li.appendChild(a);
+    return li;
 }
 
-let createMenuli = function (module_menu: module_menu, module_menus: module_menu[]) {
-
-}
+// <ul class="nav nav-third-level">                
+//     <li>
+//         <a href="#">Third Level Item</a>
+//     </li>
+// </ul>

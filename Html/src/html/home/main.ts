@@ -18,3 +18,7 @@ class Main implements IIndex {
 
 // export const main = new Main();
  new Main().init();
+ $(document).ready(function(){
+    var main = new Main();
+    main.init();
+});
